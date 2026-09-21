@@ -1,0 +1,406 @@
+[gd_scene load_steps=4 format=3 uid="uid://tuov5g0fu3oh"]
+
+[ext_resource type="Script" uid="uid://dyjy0ucldfjq3" path="res://scenes/Main.gd" id="1_main"]
+[ext_resource type="PackedScene" uid="uid://b1so76s8fa66a" path="res://scenes/setup_wizard.tscn" id="2_wizard"]
+[ext_resource type="PackedScene" uid="uid://biny50mpm5vj" path="res://scenes/install_mod.tscn" id="3_install"]
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_main")
+
+[node name="Layout" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="MenuBar" type="MenuBar" parent="Layout"]
+layout_mode = 2
+
+[node name="Mods" type="PopupMenu" parent="Layout/MenuBar"]
+unique_name_in_owner = true
+item_count = 9
+item_0/text = "Install a new mod"
+item_0/id = 0
+item_1/id = 7
+item_1/separator = true
+item_2/text = "Delete mod"
+item_2/id = 1
+item_3/text = "Increase priority"
+item_3/id = 3
+item_4/text = "Decrease priority"
+item_4/id = 4
+item_5/id = -1
+item_5/separator = true
+item_6/text = "Open mods folder"
+item_6/id = 2
+item_7/id = 8
+item_7/separator = true
+item_8/text = "Close app"
+item_8/id = 5
+
+[node name="Game" type="PopupMenu" parent="Layout/MenuBar"]
+unique_name_in_owner = true
+item_count = 1
+item_0/text = "Launch CG"
+item_0/id = 0
+
+[node name="Settings" type="PopupMenu" parent="Layout/MenuBar"]
+unique_name_in_owner = true
+item_count = 2
+item_0/text = "Run wizard"
+item_0/id = 0
+item_1/text = "Check for updates"
+item_1/id = 1
+
+[node name="Info" type="PopupMenu" parent="Layout/MenuBar"]
+unique_name_in_owner = true
+item_count = 4
+item_0/text = "Version"
+item_0/id = 0
+item_0/disabled = true
+item_1/id = -1
+item_1/separator = true
+item_2/text = "GitHub"
+item_2/id = 1
+item_3/text = "Report a bug or missing feature"
+item_3/id = 2
+
+[node name="BodyMargin" type="MarginContainer" parent="Layout"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 8
+
+[node name="Body" type="HBoxContainer" parent="Layout/BodyMargin"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ListColumn" type="VBoxContainer" parent="Layout/BodyMargin/Body"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="LoadFirstLabel" type="Label" parent="Layout/BodyMargin/Body/ListColumn"]
+modulate = Color(0.7, 0.7, 0.7, 1)
+layout_mode = 2
+text = "Loads first"
+
+[node name="HSeparator" type="HSeparator" parent="Layout/BodyMargin/Body/ListColumn"]
+layout_mode = 2
+
+[node name="Scroll" type="ScrollContainer" parent="Layout/BodyMargin/Body/ListColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ListStack" type="VBoxContainer" parent="Layout/BodyMargin/Body/ListColumn/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="EmptyLabel" type="Label" parent="Layout/BodyMargin/Body/ListColumn/Scroll/ListStack"]
+unique_name_in_owner = true
+modulate = Color(0.7, 0.7, 0.7, 1)
+layout_mode = 2
+text = "No mods installed. Click Add to install a GitHub repo or a zip."
+autowrap_mode = 3
+
+[node name="ModList" type="VBoxContainer" parent="Layout/BodyMargin/Body/ListColumn/Scroll/ListStack"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HSeparator2" type="HSeparator" parent="Layout/BodyMargin/Body/ListColumn"]
+layout_mode = 2
+
+[node name="LoadLastLabel" type="Label" parent="Layout/BodyMargin/Body/ListColumn"]
+modulate = Color(0.7, 0.7, 0.7, 1)
+layout_mode = 2
+text = "Loads last"
+
+[node name="Warning" type="Label" parent="Layout/BodyMargin/Body/ListColumn"]
+unique_name_in_owner = true
+modulate = Color(0.95, 0.75, 0.3, 1)
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="VSeparator" type="VSeparator" parent="Layout/BodyMargin/Body"]
+layout_mode = 2
+
+[node name="Side" type="VBoxContainer" parent="Layout/BodyMargin/Body"]
+custom_minimum_size = Vector2(132, 0)
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="TopButton" type="Button" parent="Layout/BodyMargin/Body/Side"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Move to top"
+
+[node name="UpButton" type="Button" parent="Layout/BodyMargin/Body/Side"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Move up"
+
+[node name="DownButton" type="Button" parent="Layout/BodyMargin/Body/Side"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Move down"
+
+[node name="AddButton" type="Button" parent="Layout/BodyMargin/Body/Side"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Add"
+
+[node name="RemoveButton" type="Button" parent="Layout/BodyMargin/Body/Side"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Remove"
+
+[node name="VSeparator2" type="VSeparator" parent="Layout/BodyMargin/Body"]
+layout_mode = 2
+
+[node name="Details" type="VBoxContainer" parent="Layout/BodyMargin/Body"]
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.85
+theme_override_constants/separation = 8
+
+[node name="DetailsEmpty" type="Label" parent="Layout/BodyMargin/Body/Details"]
+unique_name_in_owner = true
+modulate = Color(0.7, 0.7, 0.7, 1)
+layout_mode = 2
+text = "Select a mod to see details."
+autowrap_mode = 3
+
+[node name="DetailsScroll" type="ScrollContainer" parent="Layout/BodyMargin/Body/Details"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="DetailsBox" type="VBoxContainer" parent="Layout/BodyMargin/Body/Details/DetailsScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="DetailsPreview" type="TextureRect" parent="Layout/BodyMargin/Body/Details/DetailsScroll/DetailsBox"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DetailsName" type="Label" parent="Layout/BodyMargin/Body/Details/DetailsScroll/DetailsBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+autowrap_mode = 3
+
+[node name="DetailsMeta" type="RichTextLabel" parent="Layout/BodyMargin/Body/Details/DetailsScroll/DetailsBox"]
+unique_name_in_owner = true
+modulate = Color(0.7, 0.7, 0.7, 1)
+layout_mode = 2
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+
+[node name="DetailsSource" type="Label" parent="Layout/BodyMargin/Body/Details/DetailsScroll/DetailsBox"]
+unique_name_in_owner = true
+modulate = Color(0.7, 0.7, 0.7, 1)
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="DetailsStatus" type="Label" parent="Layout/BodyMargin/Body/Details/DetailsScroll/DetailsBox"]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="DetailsUpdate" type="Button" parent="Layout/BodyMargin/Body/Details/DetailsScroll/DetailsBox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "Update mod"
+
+[node name="DetailsDescription" type="Label" parent="Layout/BodyMargin/Body/Details/DetailsScroll/DetailsBox"]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="DetailsSourceCode" type="LinkButton" parent="Layout/BodyMargin/Body/Details/DetailsScroll/DetailsBox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Mod source code"
+underline = 1
+
+[node name="DetailsReport" type="LinkButton" parent="Layout/BodyMargin/Body/Details/DetailsScroll/DetailsBox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Report bug"
+underline = 1
+
+[node name="DetailsDeps" type="Label" parent="Layout/BodyMargin/Body/Details/DetailsScroll/DetailsBox"]
+unique_name_in_owner = true
+modulate = Color(0.7, 0.7, 0.7, 1)
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="DetailsWebsite" type="Label" parent="Layout/BodyMargin/Body/Details/DetailsScroll/DetailsBox"]
+unique_name_in_owner = true
+modulate = Color(0.7, 0.7, 0.7, 1)
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="DetailsFilesToggle" type="Button" parent="Layout/BodyMargin/Body/Details/DetailsScroll/DetailsBox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+toggle_mode = true
+text = "Files"
+alignment = 0
+
+[node name="DetailsFiles" type="VBoxContainer" parent="Layout/BodyMargin/Body/Details/DetailsScroll/DetailsBox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="DetailsAddedHeader" type="Label" parent="Layout/BodyMargin/Body/Details/DetailsScroll/DetailsBox/DetailsFiles"]
+unique_name_in_owner = true
+modulate = Color(0.7, 0.7, 0.7, 1)
+layout_mode = 2
+text = "Added"
+
+[node name="DetailsAdded" type="Label" parent="Layout/BodyMargin/Body/Details/DetailsScroll/DetailsBox/DetailsFiles"]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="DetailsModifiedHeader" type="Label" parent="Layout/BodyMargin/Body/Details/DetailsScroll/DetailsBox/DetailsFiles"]
+unique_name_in_owner = true
+modulate = Color(0.7, 0.7, 0.7, 1)
+layout_mode = 2
+text = "Modified"
+
+[node name="DetailsModified" type="Label" parent="Layout/BodyMargin/Body/Details/DetailsScroll/DetailsBox/DetailsFiles"]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="Footer" type="VBoxContainer" parent="Layout"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="FooterSep" type="HSeparator" parent="Layout/Footer"]
+layout_mode = 2
+
+[node name="FooterMargin" type="MarginContainer" parent="Layout/Footer"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 8
+
+[node name="FooterBox" type="VBoxContainer" parent="Layout/Footer/FooterMargin"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Status" type="Label" parent="Layout/Footer/FooterMargin/FooterBox"]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="MetaRow" type="HBoxContainer" parent="Layout/Footer/FooterMargin/FooterBox"]
+layout_mode = 2
+
+[node name="PathLabel" type="Label" parent="Layout/Footer/FooterMargin/FooterBox/MetaRow"]
+unique_name_in_owner = true
+modulate = Color(0.7, 0.7, 0.7, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Game folder not set"
+clip_text = true
+
+[node name="Version" type="Label" parent="Layout/Footer/FooterMargin/FooterBox/MetaRow"]
+unique_name_in_owner = true
+modulate = Color(0.7, 0.7, 0.7, 1)
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="Progress" type="ProgressBar" parent="Layout/Footer/FooterMargin/FooterBox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+max_value = 1.0
+
+[node name="BrowseDialog" type="FileDialog" parent="."]
+unique_name_in_owner = true
+title = "Open a Directory"
+ok_button_text = "Select Current Folder"
+file_mode = 2
+access = 2
+use_native_dialog = true
+
+[node name="ZipDialog" type="FileDialog" parent="."]
+unique_name_in_owner = true
+title = "Open a File"
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.zip ; Mod zip")
+use_native_dialog = true
+
+[node name="ConfirmDialog" type="ConfirmationDialog" parent="."]
+unique_name_in_owner = true
+unresizable = true
+force_native = true
+
+[node name="SetupWizard" parent="." instance=ExtResource("2_wizard")]
+unique_name_in_owner = true
+
+[node name="InstallModDialog" parent="." instance=ExtResource("3_install")]
+unique_name_in_owner = true
+
+[connection signal="id_pressed" from="Layout/MenuBar/Mods" to="." method="_OnModsMenu"]
+[connection signal="id_pressed" from="Layout/MenuBar/Game" to="." method="_OnGameMenu"]
+[connection signal="id_pressed" from="Layout/MenuBar/Settings" to="." method="_OnSettingsMenu"]
+[connection signal="id_pressed" from="Layout/MenuBar/Info" to="." method="_OnInfoMenu"]
+[connection signal="pressed" from="Layout/BodyMargin/Body/Side/TopButton" to="." method="_OnMoveTopPressed"]
+[connection signal="pressed" from="Layout/BodyMargin/Body/Side/UpButton" to="." method="_OnMoveUpPressed"]
+[connection signal="pressed" from="Layout/BodyMargin/Body/Side/DownButton" to="." method="_OnMoveDownPressed"]
+[connection signal="pressed" from="Layout/BodyMargin/Body/Side/AddButton" to="." method="_OnAddPressed"]
+[connection signal="pressed" from="Layout/BodyMargin/Body/Side/RemoveButton" to="." method="_OnRemovePressed"]
+[connection signal="meta_clicked" from="Layout/BodyMargin/Body/Details/DetailsScroll/DetailsBox/DetailsMeta" to="." method="_OnDetailsMetaClicked"]
+[connection signal="pressed" from="Layout/BodyMargin/Body/Details/DetailsScroll/DetailsBox/DetailsUpdate" to="." method="_OnDetailsUpdatePressed"]
+[connection signal="toggled" from="Layout/BodyMargin/Body/Details/DetailsScroll/DetailsBox/DetailsFilesToggle" to="." method="_OnDetailsFilesToggled"]
+[connection signal="dir_selected" from="BrowseDialog" to="." method="_OnGameDirSelected"]
+[connection signal="file_selected" from="ZipDialog" to="." method="_OnZipSelected"]
+[connection signal="canceled" from="ConfirmDialog" to="." method="_OnConfirmCancel"]
+[connection signal="confirmed" from="ConfirmDialog" to="." method="_OnConfirmOk"]
+[connection signal="browse_pressed" from="SetupWizard" to="." method="_OnBrowsePressed"]
+[connection signal="detect_pressed" from="SetupWizard" to="." method="_OnWizardDetect"]
+[connection signal="dismissed" from="SetupWizard" to="." method="_OnWizardDismissed"]
+[connection signal="finished" from="SetupWizard" to="." method="_OnWizardFinished"]
+[connection signal="install_loader_pressed" from="SetupWizard" to="." method="_OnWizardInstall"]
+[connection signal="page_changed" from="SetupWizard" to="." method="_OnWizardPageChanged"]
+[connection signal="uninstall_loader_pressed" from="SetupWizard" to="." method="_OnWizardUninstall"]
+[connection signal="github_install_requested" from="InstallModDialog" to="." method="_OnInstallGithub"]
+[connection signal="zip_install_requested" from="InstallModDialog" to="." method="_OnInstallZip"]

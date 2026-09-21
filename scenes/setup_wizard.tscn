@@ -1,0 +1,192 @@
+[gd_scene load_steps=3 format=3 uid="uid://b1so76s8fa66a"]
+
+[ext_resource type="Script" uid="uid://k5xe5nninlxd" path="res://scenes/SetupWizard.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_page"]
+bg_color = Color(0.137255, 0.137255, 0.137255, 0)
+
+[node name="SetupWizard" type="Window"]
+title = "CG Setup"
+initial_position = 2
+size = Vector2i(700, 500)
+visible = false
+transient = true
+unresizable = true
+force_native = true
+min_size = Vector2i(700, 500)
+script = ExtResource("1_script")
+
+[node name="Margin" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 28
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 24
+
+[node name="Root" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Pages" type="TabContainer" parent="Margin/Root"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_page")
+current_tab = 1
+tabs_visible = false
+
+[node name="Welcome" type="VBoxContainer" parent="Margin/Root/Pages"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 12
+metadata/_tab_index = 0
+
+[node name="WelcomeTitle" type="Label" parent="Margin/Root/Pages/Welcome"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Welcome to CG Mod Manager"
+
+[node name="WelcomeBody" type="Label" parent="Margin/Root/Pages/Welcome"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "This set-up will guide you throught the basic configuration of this tool, allowing you to use GML-formatted mods for CG."
+autowrap_mode = 3
+
+[node name="Location" type="VBoxContainer" parent="Margin/Root/Pages"]
+layout_mode = 2
+theme_override_constants/separation = 10
+metadata/_tab_index = 1
+
+[node name="LocationTitle" type="Label" parent="Margin/Root/Pages/Location"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Game location"
+
+[node name="LocationBody" type="Label" parent="Margin/Root/Pages/Location"]
+layout_mode = 2
+text = "Provide the folder that contains ChronoGear.exe."
+autowrap_mode = 3
+
+[node name="DetectButton" type="Button" parent="Margin/Root/Pages/Location"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Detect Installations"
+
+[node name="LocationProgress" type="ProgressBar" parent="Margin/Root/Pages/Location"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+max_value = 1.0
+
+[node name="LocationStatus" type="Label" parent="Margin/Root/Pages/Location"]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="LocationSupport" type="Label" parent="Margin/Root/Pages/Location"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+autowrap_mode = 3
+
+[node name="LocationPathRow" type="HBoxContainer" parent="Margin/Root/Pages/Location"]
+layout_mode = 2
+
+[node name="GamePathEdit" type="LineEdit" parent="Margin/Root/Pages/Location/LocationPathRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Folder location of ChronoGear.exe"
+editable = false
+
+[node name="BrowseButton" type="Button" parent="Margin/Root/Pages/Location/LocationPathRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Browse..."
+
+[node name="Loader" type="VBoxContainer" parent="Margin/Root/Pages"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 10
+metadata/_tab_index = 2
+
+[node name="LoaderTitle" type="Label" parent="Margin/Root/Pages/Loader"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Mod loader"
+
+[node name="LoaderBody" type="Label" parent="Margin/Root/Pages/Loader"]
+layout_mode = 2
+text = "The mod loader loads zipped mods from a mods folder located next to the game exe. The mod loader will run every time you start the game and attempt to load any mods. The current game files will be backed up in case of any problems.
+
+To uninstall the mod loader, click the \"Uninstall\" button."
+autowrap_mode = 3
+
+[node name="LoaderStatus" type="Label" parent="Margin/Root/Pages/Loader"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+text = "The mod loader is not installed."
+autowrap_mode = 3
+
+[node name="LoaderButtons" type="HBoxContainer" parent="Margin/Root/Pages/Loader"]
+layout_mode = 2
+
+[node name="InstallLoaderButton" type="Button" parent="Margin/Root/Pages/Loader/LoaderButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Install"
+
+[node name="LoaderProgress" type="ProgressBar" parent="Margin/Root/Pages/Loader"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+max_value = 1.0
+
+[node name="Finish" type="VBoxContainer" parent="Margin/Root/Pages"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 12
+metadata/_tab_index = 3
+
+[node name="FinishTitle" type="Label" parent="Margin/Root/Pages/Finish"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "You're set!"
+
+[node name="FinishBody" type="Label" parent="Margin/Root/Pages/Finish"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "You successfully configured CG Mod Manager.
+
+Add a GitHub owner/repo or a local zip, enable the mods you want, and set load order. Changes apply the next time you launch the game.
+
+Click Finish to close this wizard. You can run it again later from Settings."
+autowrap_mode = 3
+
+[node name="Nav" type="HBoxContainer" parent="Margin/Root"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 2
+
+[node name="BackButton" type="Button" parent="Margin/Root/Nav"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "Back"
+
+[node name="NextButton" type="Button" parent="Margin/Root/Nav"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Next"
+
+[connection signal="close_requested" from="." to="." method="_OnCloseRequested"]
+[connection signal="pressed" from="Margin/Root/Pages/Location/DetectButton" to="." method="_OnDetectPressed"]
+[connection signal="pressed" from="Margin/Root/Pages/Location/LocationPathRow/BrowseButton" to="." method="_OnBrowsePressed"]
+[connection signal="pressed" from="Margin/Root/Pages/Loader/LoaderButtons/InstallLoaderButton" to="." method="_OnInstallLoaderPressed"]
+[connection signal="pressed" from="Margin/Root/Nav/BackButton" to="." method="_OnBackPressed"]
+[connection signal="pressed" from="Margin/Root/Nav/NextButton" to="." method="_OnNextPressed"]

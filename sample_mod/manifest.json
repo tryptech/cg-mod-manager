@@ -1,0 +1,21 @@
+{
+	"name": "Example",
+	"namespace": "CGSample",
+	"version_number": "1.0.0",
+	"description": "Sample Chrono Gear mod that documents every field CG Mod Manager reads. Godot Mod Loader docs: https://wiki.godotmodding.com",
+	"website_url": "https://wiki.godotmodding.com",
+	"dependencies": [],
+	"extra": {
+		"godot": {
+			"authors": ["CGSample"],
+			"icon": "icon.png",
+			"preview": "preview.png",
+			"optional_dependencies": [],
+			"load_before": [],
+			"incompatibilities": [],
+			"compatible_mod_loader_version": ["7.0.1"],
+			"compatible_game_version": ["1.1.18"],
+			"config_schema": {}
+		}
+	}
+}

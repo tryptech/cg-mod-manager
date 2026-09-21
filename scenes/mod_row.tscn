@@ -1,0 +1,61 @@
+[gd_scene load_steps=2 format=3 uid="uid://feqv33q4sdlu"]
+
+[ext_resource type="Script" uid="uid://cgxl8van1gydi" path="res://scenes/ModRow.gd" id="1_script"]
+
+[node name="ModRow" type="PanelContainer"]
+script = ExtResource("1_script")
+
+[node name="Row" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="Enabled" type="CheckBox" parent="Row"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Enabled"
+
+[node name="IconSlot" type="Control" parent="Row"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="Placeholder" type="ColorRect" parent="Row/IconSlot"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 0.08)
+
+[node name="Icon" type="TextureRect" parent="Row/IconSlot"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Labels" type="VBoxContainer" parent="Row"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="Title" type="Label" parent="Row/Labels"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Meta" type="Label" parent="Row/Labels"]
+unique_name_in_owner = true
+modulate = Color(0.7, 0.7, 0.7, 1)
+layout_mode = 2

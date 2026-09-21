@@ -1,0 +1,5 @@
+xdelta3.exe is the official Windows x86_64 build of Xdelta 3.2.0
+https://github.com/jmacd/xdelta/releases/tag/v3.2.0
+
+Xdelta 3.2.x is licensed under the Apache License 2.0
+https://www.apache.org/licenses/LICENSE-2.0

@@ -1,0 +1,20 @@
+# Godot
+.godot/
+*.translation
+export/
+CGMM.exe
+*.console.exe
+
+# Local
+*.tmp
+user://
+.DS_Store
+Thumbs.db
+__pycache__/
+*.pyc
+
+# Editor imports of GML example/test mods
+sample_mod/**/*.import
+sample_mod/**/*.uid
+test_mods/**/*.import
+test_mods/**/*.uid

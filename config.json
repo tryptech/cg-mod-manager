@@ -1,0 +1,7 @@
+{
+	"patches_repo": "tryptech/cg-mod-manager-patches",
+	"pck_name": "ChronoGear.pck",
+	"vanilla_backup_name": "ChronoGear-vanilla.pck",
+	"game_exe_name": "ChronoGear.exe",
+	"steam_app_id": 3081840
+}
