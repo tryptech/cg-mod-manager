@@ -127,6 +127,20 @@ func _PickReleaseZip(assets: Variant) -> String:
 	return fallback
 
 
+func _PickManagerZip(assets: Variant) -> String:
+	if typeof(assets) != TYPE_ARRAY:
+		return ""
+	for asset in assets:
+		if typeof(asset) != TYPE_DICTIONARY:
+			continue
+		if str(asset.get("name", "")).to_lower() != "cgmm.zip":
+			continue
+		var url := str(asset.get("browser_download_url", ""))
+		if not url.is_empty():
+			return url
+	return _PickReleaseZip(assets)
+
+
 func LatestReleaseTag(http: HttpFetcher, owner: String, repo: String) -> Dictionary:
 	var latest: Dictionary = await http.RequestJson(
 		"https://api.github.com/repos/%s/%s/releases/latest" % [owner, repo]
@@ -139,6 +153,24 @@ func LatestReleaseTag(http: HttpFetcher, owner: String, repo: String) -> Diction
 	if typeof(data) != TYPE_DICTIONARY:
 		return {"ok": false, "error": "Unexpected GitHub response"}
 	return {"ok": true, "tag": str(data.get("tag_name", "")).strip_edges()}
+
+
+func LatestReleaseZip(http: HttpFetcher, owner: String, repo: String) -> Dictionary:
+	var latest: Dictionary = await http.RequestJson(
+		"https://api.github.com/repos/%s/%s/releases/latest" % [owner, repo]
+	)
+	if not latest.get("ok", false):
+		if int(latest.get("status", 0)) == 404:
+			return {"ok": true, "tag": "", "url": ""}
+		return {"ok": false, "error": str(latest.get("error", "GitHub lookup failed")), "status": int(latest.get("status", 0))}
+	var data: Dictionary = latest.get("data", {})
+	if typeof(data) != TYPE_DICTIONARY:
+		return {"ok": false, "error": "Unexpected GitHub response"}
+	return {
+		"ok": true,
+		"tag": str(data.get("tag_name", "")).strip_edges(),
+		"url": _PickManagerZip(data.get("assets", [])),
+	}
 
 
 static func StripVersionPrefix(value: String) -> String:

@@ -56,9 +56,11 @@ var confirmResult := false
 var confirmDone := false
 var identified: Dictionary = {}
 var checkingUpdates := false
+var pendingUpdateError := ""
 
 
 func _ready() -> void:
+	pendingUpdateError = AppUpdater.ConsumeUpdateError()
 	config = AppConfig.LoadConfig()
 	http = HttpFetcher.new()
 	add_child(http)
@@ -359,6 +361,7 @@ func _RefreshPatchStatus() -> void:
 		_SetStatus("Run Settings → Run wizard to locate Chrono Gear.")
 		versionLabel.text = ""
 		_UpdateButtons()
+		_ShowPendingUpdateError()
 		return
 	_SetStatus("Checking game files...")
 	_SetBusy(true)
@@ -424,6 +427,7 @@ func _ApplyIdentifyToMain(_result: Dictionary) -> void:
 		patched = false
 		_SetStatus(str(identified.get("error", "Could not identify game version.")))
 		versionLabel.text = ""
+		_ShowPendingUpdateError()
 		return
 	var tag := str(identified.get("tag", "?"))
 	versionLabel.text = "Game %s" % tag
@@ -433,6 +437,7 @@ func _ApplyIdentifyToMain(_result: Dictionary) -> void:
 	else:
 		patched = false
 		_SetStatus("Vanilla game detected. Install the mod loader from the setup wizard.")
+	_ShowPendingUpdateError()
 
 
 func _OnWizardInstall() -> void:
@@ -473,6 +478,7 @@ func _OnWizardDismissed() -> void:
 	if busy:
 		return
 	wizard.CloseWindow()
+	_ShowPendingUpdateError()
 
 
 func _AnnounceInstallStep(text: String) -> void:
@@ -1267,7 +1273,7 @@ func _CheckManagerUpdate() -> void:
 		return
 	_SetBusy(true)
 	_SetStatus("Checking for mod manager updates...")
-	var latest: Dictionary = await github.LatestReleaseTag(http, spec["owner"], spec["repo"])
+	var latest: Dictionary = await github.LatestReleaseZip(http, spec["owner"], spec["repo"])
 	_SetBusy(false)
 	if not latest.get("ok", false):
 		_SetStatus(str(latest.get("error", "Could not check for updates")))
@@ -1277,10 +1283,35 @@ func _CheckManagerUpdate() -> void:
 	if tag.is_empty():
 		_SetStatus("No mod manager releases were found.")
 		return
-	if GithubModInstaller.VersionIsNewer(tag, current):
-		var newest := GithubModInstaller.StripVersionPrefix(tag)
-		_SetStatus("Update available: %s (you have %s)." % [newest, current])
-		if await _Ask("Open the GitHub releases page for CG Mod Manager %s?" % newest):
-			OS.shell_open(GITHUB_REPO_URL + "/releases")
+	if not GithubModInstaller.VersionIsNewer(tag, current):
+		_SetStatus("CG Mod Manager is up to date (%s)." % current)
 		return
-	_SetStatus("CG Mod Manager is up to date (%s)." % current)
+	var newest := GithubModInstaller.StripVersionPrefix(tag)
+	var zip_url := str(latest.get("url", "")).strip_edges()
+	if zip_url.is_empty():
+		_SetStatus("Update %s has no zip to download." % newest)
+		return
+	if OS.has_feature("editor"):
+		_SetStatus("Update available: %s (you have %s). Install it from the exported program." % [newest, current])
+		return
+	_SetStatus("Update available: %s (you have %s)." % [newest, current])
+	if not await _Ask("Download and install CG Mod Manager %s? The app will close and reopen." % newest):
+		return
+	_SetBusy(true)
+	progress.value = 0
+	_SetStatus("Downloading CG Mod Manager %s..." % newest)
+	var installed: Dictionary = await AppUpdater.DownloadAndRelaunch(http, zip_url)
+	if not installed.get("ok", false):
+		_SetStatus(str(installed.get("error", "Could not install the update")))
+		_SetBusy(false)
+		return
+	_SetStatus("Restarting...")
+	await get_tree().process_frame
+	get_tree().quit()
+
+
+func _ShowPendingUpdateError() -> void:
+	if pendingUpdateError.is_empty():
+		return
+	_SetStatus("Update failed: %s" % pendingUpdateError)
+	pendingUpdateError = ""
