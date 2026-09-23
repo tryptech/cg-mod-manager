@@ -55,6 +55,7 @@ func Scan() -> void:
 	for entry in found:
 		if not used.has(entry["mod_id"]):
 			ordered.append(entry)
+	ordered.reverse()
 	entries = ordered
 	for entry in entries:
 		var saved_entry: Dictionary = saved_mods.get(entry["mod_id"], {})
@@ -556,8 +557,8 @@ func _SortedByDependencies(list: Array[Dictionary]) -> Array[Dictionary]:
 		for dep_id in _ResolvedDepIds(entry):
 			if dep_id == modId or not indegree.has(dep_id):
 				continue
-			edges[dep_id].append(modId)
-			indegree[modId] = int(indegree[modId]) + 1
+			edges[modId].append(dep_id)
+			indegree[dep_id] = int(indegree[dep_id]) + 1
 	var remaining: Dictionary = {}
 	for i in n:
 		remaining[i] = true
@@ -598,7 +599,7 @@ func _OrderValid(list: Array) -> bool:
 		ranks[list[i]["mod_id"]] = i
 	for i in list.size():
 		for dep_id in _ResolvedDepIds(list[i]):
-			if ranks.has(dep_id) and int(ranks[dep_id]) > i:
+			if ranks.has(dep_id) and int(ranks[dep_id]) < i:
 				return false
 	return true
 
@@ -665,8 +666,8 @@ func _EntryById(modId: String) -> Dictionary:
 
 func _RebuildLoadOrder() -> void:
 	loadOrder = PackedStringArray()
-	for entry in entries:
-		loadOrder.append(entry["mod_id"])
+	for i in range(entries.size() - 1, -1, -1):
+		loadOrder.append(entries[i]["mod_id"])
 
 
 func _IndexOf(modId: String) -> int:

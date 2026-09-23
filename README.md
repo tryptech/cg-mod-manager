@@ -29,7 +29,7 @@ A documented example mod is in [`sample_mod/`](sample_mod/). Field-by-field note
 
 Mods are Thunderstore-style GML zips (`manifest.json` + `mod_main.gd`). They are identified in the manager by the `{namespace}` and `{name}` in `manifest.json`. Enabled zips live in the game’s `mods/` folder. Disabled zips are moved to `mods-disabled/` so the loader does not see them. Load order is stored in `mods/mod_manager.json`.
 
-Mods can be installed in one of two ways: via a local zip, or via GitHub `owner/repo` (full GitHub URLs are also accepted). New mods are inserted at the top, then ordered so dependencies load first.
+Mods can be installed in one of two ways: via a local zip, or via GitHub `owner/repo` (full GitHub URLs are also accepted). New mods are inserted at the top (loaded last). Dependencies are kept lower in the list so they load first.
 
 - GitHub installs walk `owner/repo` (and GitHub URLs) listed in `dependencies` and install those mods too.
 - A zip with the same namespace, name, and authors but a higher `version_number` is treated as an in-place update and keeps the existing source (GitHub or local).

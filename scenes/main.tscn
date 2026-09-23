@@ -94,7 +94,7 @@ theme_override_constants/separation = 6
 [node name="LoadFirstLabel" type="Label" parent="Layout/BodyMargin/Body/ListColumn"]
 modulate = Color(0.7, 0.7, 0.7, 1)
 layout_mode = 2
-text = "Loads first"
+text = "Loads last"
 
 [node name="HSeparator" type="HSeparator" parent="Layout/BodyMargin/Body/ListColumn"]
 layout_mode = 2
@@ -126,7 +126,7 @@ layout_mode = 2
 [node name="LoadLastLabel" type="Label" parent="Layout/BodyMargin/Body/ListColumn"]
 modulate = Color(0.7, 0.7, 0.7, 1)
 layout_mode = 2
-text = "Loads last"
+text = "Loads first"
 
 [node name="Warning" type="Label" parent="Layout/BodyMargin/Body/ListColumn"]
 unique_name_in_owner = true
