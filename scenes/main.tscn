@@ -55,24 +55,27 @@ item_0/id = 0
 
 [node name="Settings" type="PopupMenu" parent="Layout/MenuBar"]
 unique_name_in_owner = true
-item_count = 2
+item_count = 1
 item_0/text = "Run wizard"
 item_0/id = 0
-item_1/text = "Check for updates"
-item_1/id = 1
 
 [node name="Info" type="PopupMenu" parent="Layout/MenuBar"]
 unique_name_in_owner = true
-item_count = 4
+item_count = 6
 item_0/text = "Version"
 item_0/id = 0
 item_0/disabled = true
-item_1/id = -1
-item_1/separator = true
-item_2/text = "GitHub"
-item_2/id = 1
-item_3/text = "Report a bug or missing feature"
-item_3/id = 2
+item_1/text = "Check for updates"
+item_1/id = 3
+item_2/text = "Check for updates on startup"
+item_2/checkable = 1
+item_2/id = 4
+item_3/id = -1
+item_3/separator = true
+item_4/text = "GitHub"
+item_4/id = 1
+item_5/text = "Report a bug or missing feature"
+item_5/id = 2
 
 [node name="BodyMargin" type="MarginContainer" parent="Layout"]
 layout_mode = 2

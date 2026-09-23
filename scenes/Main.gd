@@ -68,6 +68,7 @@ func _ready() -> void:
 	infoMenu.set_item_text(0, "Version %s" % _ManagerVersion())
 	get_window().title = "CG Mod Manager %s" % _ManagerVersion()
 	_ApplyMenuAccelerators()
+	_ApplyStartupUpdateItem()
 	if PatchService.IsValidInstall(config) and PatchService.LooksPatched(config):
 		if not config.setupComplete:
 			config.setupComplete = true
@@ -78,6 +79,7 @@ func _ready() -> void:
 		_UpdateButtons()
 		_StartWizard()
 	detailsPreview.resized.connect(_FitDetailsPreview)
+	_StartupUpdateCheck()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -166,11 +168,8 @@ func _OnModsMenu(id: int) -> void:
 
 
 func _OnSettingsMenu(id: int) -> void:
-	match id:
-		0:
-			_StartWizard()
-		1:
-			_CheckManagerUpdate()
+	if id == 0:
+		_StartWizard()
 
 
 func _OnGameMenu(id: int) -> void:
@@ -184,6 +183,12 @@ func _OnInfoMenu(id: int) -> void:
 			OS.shell_open(GITHUB_REPO_URL)
 		2:
 			OS.shell_open(GITHUB_REPO_URL + "/issues")
+		3:
+			_CheckManagerUpdate()
+		4:
+			config.checkUpdatesOnStartup = not config.checkUpdatesOnStartup
+			_ApplyStartupUpdateItem()
+			config.SaveSettings()
 
 
 func _ManagerVersion() -> String:
@@ -975,9 +980,11 @@ func _UpdateButtons() -> void:
 		modsMenu.set_item_disabled(6, not has_game)
 	if gameMenu.item_count >= 1:
 		gameMenu.set_item_disabled(0, busy or not FileAccess.file_exists(config.gameDir.path_join(config.gameExeName)))
-	if settingsMenu.item_count >= 2:
+	if settingsMenu.item_count >= 1:
 		settingsMenu.set_item_disabled(0, busy)
-		settingsMenu.set_item_disabled(1, busy)
+	var updateIndex := infoMenu.get_item_index(3)
+	if updateIndex >= 0:
+		infoMenu.set_item_disabled(updateIndex, busy)
 	_UpdateDetails()
 
 
@@ -1264,32 +1271,56 @@ func _ModSupportsGame(info: Dictionary) -> bool:
 	return ZipMod.SupportsGameVersion(info, _CurrentGameTag())
 
 
-func _CheckManagerUpdate() -> void:
+func _ApplyStartupUpdateItem() -> void:
+	var index := infoMenu.get_item_index(4)
+	if index < 0:
+		return
+	infoMenu.set_item_as_checkable(index, true)
+	infoMenu.set_item_checked(index, config.checkUpdatesOnStartup)
+
+
+func _StartupUpdateCheck() -> void:
+	if not config.checkUpdatesOnStartup:
+		return
+	while is_inside_tree() and (wizard.visible or busy):
+		await get_tree().process_frame
+	if not is_inside_tree() or wizard.visible or busy or not config.checkUpdatesOnStartup:
+		return
+	await _CheckManagerUpdate(true)
+
+
+func _CheckManagerUpdate(quiet := false) -> void:
 	if busy:
 		return
 	var spec := GithubModInstaller.ParseSpec(GITHUB_REPO_URL)
 	if spec.has("error"):
-		_SetStatus(str(spec["error"]))
+		if not quiet:
+			_SetStatus(str(spec["error"]))
 		return
 	_SetBusy(true)
-	_SetStatus("Checking for mod manager updates...")
+	if not quiet:
+		_SetStatus("Checking for mod manager updates...")
 	var latest: Dictionary = await github.LatestReleaseZip(http, spec["owner"], spec["repo"])
 	_SetBusy(false)
 	if not latest.get("ok", false):
-		_SetStatus(str(latest.get("error", "Could not check for updates")))
+		if not quiet:
+			_SetStatus(str(latest.get("error", "Could not check for updates")))
 		return
 	var tag := str(latest.get("tag", "")).strip_edges()
 	var current := _ManagerVersion()
 	if tag.is_empty():
-		_SetStatus("No mod manager releases were found.")
+		if not quiet:
+			_SetStatus("No mod manager releases were found.")
 		return
 	if not GithubModInstaller.VersionIsNewer(tag, current):
-		_SetStatus("CG Mod Manager is up to date (%s)." % current)
+		if not quiet:
+			_SetStatus("CG Mod Manager is up to date (%s)." % current)
 		return
 	var newest := GithubModInstaller.StripVersionPrefix(tag)
 	var zip_url := str(latest.get("url", "")).strip_edges()
 	if zip_url.is_empty():
-		_SetStatus("Update %s has no zip to download." % newest)
+		if not quiet:
+			_SetStatus("Update %s has no zip to download." % newest)
 		return
 	if OS.has_feature("editor"):
 		_SetStatus("Update available: %s (you have %s). Install it from the exported program." % [newest, current])

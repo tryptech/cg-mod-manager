@@ -11,6 +11,7 @@ var gameExeName := "ChronoGear.exe"
 var steamAppId := 3081840
 var gameDir := ""
 var setupComplete := false
+var checkUpdatesOnStartup := false
 
 
 static func LoadConfig() -> AppConfig:
@@ -26,6 +27,7 @@ static func LoadConfig() -> AppConfig:
 	if settings.has("game_dir"):
 		cfg.gameDir = str(settings["game_dir"])
 	cfg.setupComplete = bool(settings.get("setup_complete", false))
+	cfg.checkUpdatesOnStartup = bool(settings.get("check_updates_on_startup", false))
 	return cfg
 
 
@@ -37,6 +39,7 @@ func SaveSettings() -> void:
 	file.store_string(JSON.stringify({
 		"game_dir": gameDir,
 		"setup_complete": setupComplete,
+		"check_updates_on_startup": checkUpdatesOnStartup,
 	}, "\t"))
 
 
